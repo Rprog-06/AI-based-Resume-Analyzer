@@ -42,7 +42,7 @@ ${pdf.text}
 `;
 
     const response = await axios.post(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + VERTEX_API_KEY,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + VERTEX_API_KEY,
       {
         contents: [{ parts: [{ text: prompt }] }]
       }
