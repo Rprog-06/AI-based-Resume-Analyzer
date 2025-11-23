@@ -14,7 +14,7 @@ app.use(express.json());
 const upload = multer();
 
 const VERTEX_API_KEY = process.env.VERTEX_API_KEY;
-console.log("API KEY FOUND?", VERTEX_API_KEY);
+console.log("API KEY FOUND?", !!VERTEX_API_KEY);
 
 app.post("/analyze", upload.single("resume"), async (req, res) => {
   try {
