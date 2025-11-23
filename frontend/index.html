@@ -80,12 +80,13 @@
 
 
     <script>
-       
+     document.getElementById("analyzeBtn").addEventListener("click", analyzeResume);
+  
 async function analyzeResume() {
-    const fileInput = document.getElementById("resume");
+    const fileInput = document.getElementById("resumeFile");
     const loading = document.getElementById("loading");
-    const resultBox = document.getElementById("result-box");
-    const resultText = document.getElementById("result");
+    const resultBox = document.getElementById("resultBox");
+    const resultText = document.getElementById("resultContent");
 
     if (!fileInput.files[0]) {
         alert("Please upload a PDF resume.");
