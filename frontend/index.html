@@ -8,62 +8,61 @@
 
     <style>
         body {
-    background:#f5f7fa;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 40px 10px;
-}
+            background:#f5f7fa;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            padding: 40px 10px;
+        }
 
-.container {
-    max-width: 600px;
-    width: 100%;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
 
-.title {
-    text-align: center;
-    margin-bottom: 20px;
-}
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-.upload-box {
-    padding: 20px;
-    border: 2px dashed #3b82f6;
-    border-radius: 10px;
-    text-align: center;
-}
+        .upload-box {
+            padding: 20px;
+            border: 2px dashed #3b82f6;
+            border-radius: 10px;
+            text-align: center;
+        }
 
-#analyzeBtn {
-    margin-top: 15px;
-    background:#3b82f6;
-    color:white;
-    padding: 10px 20px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-}
+        #analyzeBtn {
+            margin-top: 15px;
+            background:#3b82f6;
+            color:white;
+            padding: 10px 20px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        }
 
-.result-box {
-    margin-top: 25px;
-    padding: 20px;
-    background: #eef3ff;
-    border-radius: 10px;
-    border-left: 4px solid #3b82f6;
-}
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eef3ff;
+            border-radius: 10px;
+            border-left: 4px solid #3b82f6;
+        }
 
-#resultContent {
-    white-space: pre-wrap;
-}
-
-         </style>
+        #resultContent {
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
     <h1 class="title">AI Resume Analyzer</h1>
 
     <div class="upload-box">
@@ -78,13 +77,12 @@
     </div>
 </div>
 
+<script>
 
-    <script>
-     document.getElementById("analyzeBtn").addEventListener("click", analyzeResume);
-  
+document.getElementById("analyzeBtn").addEventListener("click", analyzeResume);
+
 async function analyzeResume() {
     const fileInput = document.getElementById("resumeFile");
-    const loading = document.getElementById("loading");
     const resultBox = document.getElementById("resultBox");
     const resultText = document.getElementById("resultContent");
 
@@ -93,7 +91,6 @@ async function analyzeResume() {
         return;
     }
 
-    loading.style.display = "block";
     resultBox.style.display = "none";
 
     const formData = new FormData();
@@ -105,17 +102,14 @@ async function analyzeResume() {
             body: formData
         });
 
-        // If backend did not return valid JSON → this fixes it
         let data;
+
         try {
             data = await response.json();
         } catch (parseError) {
-            loading.style.display = "none";
             alert("Backend returned invalid JSON.");
             return;
         }
-
-        loading.style.display = "none";
 
         if (response.ok && data.success) {
             resultBox.style.display = "block";
@@ -125,15 +119,10 @@ async function analyzeResume() {
         }
 
     } catch (error) {
-        loading.style.display = "none";
         alert("Connection error: " + error.message);
     }
 }
 </script>
 
-
-            
-   
 </body>
-
 </html>
