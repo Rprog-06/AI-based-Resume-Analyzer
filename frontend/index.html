@@ -69,6 +69,10 @@
         <p>Supported: <strong>PDF only</strong> • Max size: 5MB</p>
         <input type="file" id="resumeFile" />
         <button id="analyzeBtn">Analyze Resume</button>
+        <p id="loadingText" style="display:none; color:#3b82f6; margin-top:10px;">
+    ⏳ Processing your resume… please wait
+</p>
+
     </div>
 
     <div id="resultBox" class="result-box" style="display: none;">
@@ -85,12 +89,14 @@ async function analyzeResume() {
     const fileInput = document.getElementById("resumeFile");
     const resultBox = document.getElementById("resultBox");
     const resultText = document.getElementById("resultContent");
+    const loadingText = document.getElementById("loadingText");
+
 
     if (!fileInput.files[0]) {
         alert("Please upload a PDF resume.");
         return;
     }
-
+    loadingText.style.display = "block";
     resultBox.style.display = "none";
 
     const formData = new FormData();
@@ -107,10 +113,11 @@ async function analyzeResume() {
         try {
             data = await response.json();
         } catch (parseError) {
+             loadingText.style.display = "none";
             alert("Backend returned invalid JSON.");
             return;
         }
-
+        loadingText.style.display = "none"
         if (response.ok && data.success) {
             resultBox.style.display = "block";
             resultText.textContent = data.output;
@@ -119,6 +126,7 @@ async function analyzeResume() {
         }
 
     } catch (error) {
+         loadingText.style.display = "none";
         alert("Connection error: " + error.message);
     }
 }
