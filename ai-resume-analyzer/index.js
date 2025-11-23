@@ -8,7 +8,16 @@ dotenv.config();
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://ai-based-resume-analyzer-1.onrender.com", // your frontend
+    "http://localhost:5500",
+    "http://localhost:3000"
+  ],
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type"],
+}));
+
 app.use(express.json());
 
 const upload = multer();
