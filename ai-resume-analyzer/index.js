@@ -10,9 +10,10 @@ dotenv.config();
 const app = express();
 app.use(cors({
   origin: [
+     "http://127.0.0.1:5501",
     "https://ai-based-resume-analyzer-1.onrender.com", // your frontend
     "http://localhost:5500",
-    "http://localhost:3000"
+    "http://localhost:3000",
   ],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
@@ -29,16 +30,44 @@ app.post("/analyze", upload.single("resume"), async (req, res) => {
   try {
     const pdf = await pdfParse(req.file.buffer);
 
+    // 1️⃣ Chunk resume
+    const chunks = chunkText(pdf.text);
+
+    // 2️⃣ Embed resume chunks
+    const embeddedChunks = [];
+    for (const chunk of chunks) {
+      const embedding = await getEmbedding(chunk);
+      embeddedChunks.push({ text: chunk, embedding });
+    }
+
+    // 3️⃣ Embed query (retrieval step)
+    const query = "Analyze resume for ATS score, skills, grammar and improvements";
+    const queryEmbedding = await getEmbedding(query);
+
+    // 4️⃣ Retrieve top relevant chunks (RAG CORE)
+    const ranked = embeddedChunks
+      .map(c => ({
+        text: c.text,
+        score: cosineSimilarity(queryEmbedding, c.embedding)
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4); // top-4 chunks only
+
+    const context = ranked.map(r => r.text).join("\n\n");
+
+    // 5️⃣ Send ONLY retrieved content to Gemini
     const prompt = `
-Analyze this resume and return:
+You are an ATS resume analyzer.
+
+Analyze the resume content below and return:
 - ATS Score /100
 - Skill Match Score /100
 - Grammar Score /100
 - Summary
 - Improvements
 
-Resume:
-${pdf.text}
+Resume Content:
+${context}
 `;
 
     const response = await axios.post(
@@ -55,7 +84,7 @@ ${pdf.text}
     res.json({ success: true, output: result });
 
   } catch (err) {
-    res.json({ success: false, error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
