@@ -63,6 +63,7 @@ ${pdf.text}
     res.json({ success: true, output: result });
 
   } catch (err) {
+    console.error("FULL AI ERROR:", err.response?.data || err.message);
     res.status(500).json({ success: false, error: err.message });
   }
 });
