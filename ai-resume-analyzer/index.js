@@ -8,9 +8,20 @@ dotenv.config();
 
 
 const app = express();
+const allowedOrigins = [
+  "https://ai-based-resume-analyzer-hazel.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:5173",
+];
+
 app.use(cors({
-  origin: true,
-    
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type"],
 }));
