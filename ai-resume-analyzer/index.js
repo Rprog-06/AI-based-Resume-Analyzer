@@ -12,6 +12,7 @@ const allowedOrigins = [
   "https://ai-based-resume-analyzer-hazel.vercel.app",
   "http://localhost:3000",
   "http://localhost:5173",
+  "http://127.0.0.1:5501"
 ];
 
 app.use(cors({
