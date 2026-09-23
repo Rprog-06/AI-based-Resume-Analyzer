@@ -1,0 +1,8 @@
+{
+  "name": "ai-resume-analyzer-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node generate-config.js"
+  }
+}
