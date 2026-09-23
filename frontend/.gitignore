@@ -1,1 +1,6 @@
 .env
+.env.*
+!.env.example
+
+config.js
+node_modules/
